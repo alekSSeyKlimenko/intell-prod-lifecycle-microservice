@@ -9,9 +9,6 @@ namespace IntellProdLifeCycleMS.Infrastructure.Data
 
         public AppDbContext()
         {
-            var folder = Environment.SpecialFolder.LocalApplicationData;
-            var path = Environment.GetFolderPath(folder);
-            DbPath = $"{path}{System.IO.Path.DirectorySeparatorChar}IntellProdLifeCycle.db";
         }
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options)
