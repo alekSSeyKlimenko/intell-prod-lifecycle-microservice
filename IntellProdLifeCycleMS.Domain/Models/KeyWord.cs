@@ -14,3 +14,4 @@ namespace IntellProdLifeCycleMS.Domain.Models
         public IntelliegentWork IntelliegentWork { get; set; }
     }
 }
+
