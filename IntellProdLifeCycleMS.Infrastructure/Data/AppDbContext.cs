@@ -22,8 +22,9 @@ namespace IntellProdLifeCycleMS.Infrastructure.Data
         public DbSet<KeyWord> KeyWords { get; set; }
         public DbSet<Indexation> Indexations { get; set; }
         public DbSet<EducationalProgram> EducationalPrograms { get; set; }
+        public DbSet<RegistrationCertificate> RegistrationCertificate { get; set; }
 
-        
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
             => options.UseSqlite("Filename=Database.db");
