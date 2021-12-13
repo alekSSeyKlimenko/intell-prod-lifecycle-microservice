@@ -14,32 +14,38 @@ namespace IntellProdLifeCycleMS.API.Controllers
     [ApiController]
     public class RegistrationCertificatesController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IPRepository _repository;
 
         public RegistrationCertificatesController(AppDbContext context)
         {
-            _context = context;
+            _repository = new IPRepository(context);
         }
 
         // GET: api/RegistrationCertificates
         [HttpGet]
         public async Task<ActionResult<IEnumerable<RegistrationCertificate>>> GetRegistrationCertificate()
         {
-            return await _context.RegistrationCertificate.ToListAsync();
+            var certificates = await _repository.GetByIdAll<RegistrationCertificate>();
+
+            if (certificates == null)
+            {
+                return NotFound();
+            }
+            return certificates;
         }
 
         // GET: api/RegistrationCertificates/5
         [HttpGet("{id}")]
         public async Task<ActionResult<RegistrationCertificate>> GetRegistrationCertificate(int id)
         {
-            var registrationCertificate = await _context.RegistrationCertificate.FindAsync(id);
+            var certificate = await _repository.GetById<RegistrationCertificate>(id);
 
-            if (registrationCertificate == null)
+            if (certificate == null)
             {
                 return NotFound();
             }
 
-            return registrationCertificate;
+            return certificate;
         }
 
         // PUT: api/RegistrationCertificates/5
@@ -53,15 +59,13 @@ namespace IntellProdLifeCycleMS.API.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(registrationCertificate).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                _repository.Update<RegistrationCertificate>(registrationCertificate);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!RegistrationCertificateExists(id))
+                if (!_repository.EntityExist<RegistrationCertificate>(id))
                 {
                     return NotFound();
                 }
@@ -80,31 +84,24 @@ namespace IntellProdLifeCycleMS.API.Controllers
         [HttpPost]
         public async Task<ActionResult<RegistrationCertificate>> PostRegistrationCertificate(RegistrationCertificate registrationCertificate)
         {
-            _context.RegistrationCertificate.Add(registrationCertificate);
-            await _context.SaveChangesAsync();
+            await _repository.Add<RegistrationCertificate>(registrationCertificate);
 
-            return CreatedAtAction("GetRegistrationCertificate", new { id = registrationCertificate.Id }, registrationCertificate);
+            return CreatedAtAction("GetArticle", new { id = registrationCertificate.Id }, registrationCertificate);
         }
 
         // DELETE: api/RegistrationCertificates/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<RegistrationCertificate>> DeleteRegistrationCertificate(int id)
         {
-            var registrationCertificate = await _context.RegistrationCertificate.FindAsync(id);
-            if (registrationCertificate == null)
+            var certificate = await _repository.GetById<RegistrationCertificate>(id);
+            if (certificate == null)
             {
                 return NotFound();
             }
 
-            _context.RegistrationCertificate.Remove(registrationCertificate);
-            await _context.SaveChangesAsync();
+            await _repository.Delete<RegistrationCertificate>(certificate);
 
-            return registrationCertificate;
-        }
-
-        private bool RegistrationCertificateExists(int id)
-        {
-            return _context.RegistrationCertificate.Any(e => e.Id == id);
+            return certificate;
         }
     }
 }

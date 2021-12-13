@@ -51,10 +51,15 @@ namespace IntellProdLifeCycleMS.Infrastructure.Data
             return entity;
         }
 
-        public async void Update<T>(T entity) where T : IntelliegentWork
+        public async Task Update<T>(T entity) where T : IntelliegentWork
         {
             _dbContext.Entry(entity).State = EntityState.Modified;
             await _dbContext.SaveChangesAsync();
+        }
+
+        public bool EntityExist<T>(int Id) where T : IntelliegentWork
+        {
+            return _dbContext.Set<T>().Any(e => e.Id == Id);
         }
     }
 }

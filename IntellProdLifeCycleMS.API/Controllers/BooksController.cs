@@ -14,25 +14,32 @@ namespace IntellProdLifeCycleMS.API.Controllers
     [ApiController]
     public class BooksController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IPRepository _repository;
 
         public BooksController(AppDbContext context)
         {
-            _context = context;
+
+            _repository = new IPRepository(context);
         }
 
         // GET: api/Books
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Book>>> GetBook()
         {
-            return await _context.Book.ToListAsync();
+            var books = await _repository.GetByIdAll<Book>();
+
+            if (books == null)
+            {
+                return NotFound();
+            }
+            return books;
         }
 
         // GET: api/Books/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Book>> GetBook(int id)
         {
-            var book = await _context.Book.FindAsync(id);
+            var book = await _repository.GetById<Book>(id);
 
             if (book == null)
             {
@@ -52,16 +59,14 @@ namespace IntellProdLifeCycleMS.API.Controllers
             {
                 return BadRequest();
             }
-
-            _context.Entry(book).State = EntityState.Modified;
-
+         
             try
             {
-                await _context.SaveChangesAsync();
+                await _repository.Update<Book>(book);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!BookExists(id))
+                if (!_repository.EntityExist<Book>(id))
                 {
                     return NotFound();
                 }
@@ -80,31 +85,24 @@ namespace IntellProdLifeCycleMS.API.Controllers
         [HttpPost]
         public async Task<ActionResult<Book>> PostBook(Book book)
         {
-            _context.Book.Add(book);
-            await _context.SaveChangesAsync();
+            await _repository.Add<Book>(book);
 
-            return CreatedAtAction("GetBook", new { id = book.Id }, book);
+            return CreatedAtAction("GetArticle", new { id = book.Id }, book);
         }
 
         // DELETE: api/Books/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<Book>> DeleteBook(int id)
         {
-            var book = await _context.Book.FindAsync(id);
+            var book = await _repository.GetById<Book>(id);
             if (book == null)
             {
                 return NotFound();
             }
 
-            _context.Book.Remove(book);
-            await _context.SaveChangesAsync();
+            await _repository.Delete<Book>(book);
 
             return book;
-        }
-
-        private bool BookExists(int id)
-        {
-            return _context.Book.Any(e => e.Id == id);
         }
     }
 }

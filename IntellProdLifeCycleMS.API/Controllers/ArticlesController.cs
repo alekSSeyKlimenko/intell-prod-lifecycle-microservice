@@ -14,25 +14,32 @@ namespace IntellProdLifeCycleMS.API.Controllers
     [ApiController]
     public class ArticlesController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IPRepository _repository;
 
         public ArticlesController(AppDbContext context)
         {
-            _context = context;
+
+            _repository = new IPRepository(context);
         }
 
         // GET: api/Articles
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Article>>> GetArticle()
         {
-            return await _context.Article.ToListAsync();
+            var articles = await _repository.GetByIdAll<Article>();
+
+            if (articles == null)
+            {
+                return NotFound();
+            }
+            return articles;
         }
 
         // GET: api/Articles/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Article>> GetArticle(int id)
         {
-            var article = await _context.Article.FindAsync(id);
+            var article = await _repository.GetById<Article>(id);
 
             if (article == null)
             {
@@ -53,15 +60,13 @@ namespace IntellProdLifeCycleMS.API.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(article).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                await _repository.Update<Article>(article);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ArticleExists(id))
+                if (!_repository.EntityExist<Article>(id))
                 {
                     return NotFound();
                 }
@@ -80,8 +85,7 @@ namespace IntellProdLifeCycleMS.API.Controllers
         [HttpPost]
         public async Task<ActionResult<Article>> PostArticle(Article article)
         {
-            _context.Article.Add(article);
-            await _context.SaveChangesAsync();
+            await _repository.Add<Article>(article);
 
             return CreatedAtAction("GetArticle", new { id = article.Id }, article);
         }
@@ -90,21 +94,15 @@ namespace IntellProdLifeCycleMS.API.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<Article>> DeleteArticle(int id)
         {
-            var article = await _context.Article.FindAsync(id);
+            var article = await _repository.GetById<Article>(id);
             if (article == null)
             {
                 return NotFound();
             }
 
-            _context.Article.Remove(article);
-            await _context.SaveChangesAsync();
+            await _repository.Delete<Article>(article);
 
             return article;
-        }
-
-        private bool ArticleExists(int id)
-        {
-            return _context.Article.Any(e => e.Id == id);
         }
     }
 }
