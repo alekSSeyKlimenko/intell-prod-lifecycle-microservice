@@ -2,7 +2,7 @@
 
 namespace IntellProdLifeCycleMS.Infrastructure.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -15,7 +15,7 @@ namespace IntellProdLifeCycleMS.Infrastructure.Migrations
                     Title = table.Column<string>(type: "TEXT", nullable: true),
                     Subtitle = table.Column<string>(type: "TEXT", nullable: true),
                     Type = table.Column<string>(type: "TEXT", nullable: true),
-                    DOI = table.Column<int>(type: "INTEGER", nullable: false),
+                    DOI = table.Column<string>(type: "TEXT", nullable: true),
                     Year = table.Column<string>(type: "TEXT", nullable: true),
                     Country = table.Column<string>(type: "TEXT", nullable: true),
                     City = table.Column<string>(type: "TEXT", nullable: true),
@@ -23,12 +23,18 @@ namespace IntellProdLifeCycleMS.Infrastructure.Migrations
                     Status = table.Column<string>(type: "TEXT", nullable: true),
                     Description = table.Column<string>(type: "TEXT", nullable: true),
                     Discriminator = table.Column<string>(type: "TEXT", nullable: false),
-                    Organization = table.Column<string>(type: "TEXT", nullable: true),
-                    Level = table.Column<int>(type: "INTEGER", nullable: true),
                     Publisher = table.Column<string>(type: "TEXT", nullable: true),
                     Edition = table.Column<string>(type: "TEXT", nullable: true),
                     UDK = table.Column<string>(type: "TEXT", nullable: true),
-                    PageCount = table.Column<int>(type: "INTEGER", nullable: true)
+                    PageCount = table.Column<int>(type: "INTEGER", nullable: true),
+                    CollectionTitle = table.Column<string>(type: "TEXT", nullable: true),
+                    StartPage = table.Column<int>(type: "INTEGER", nullable: true),
+                    EndPage = table.Column<int>(type: "INTEGER", nullable: true),
+                    MagazineNumber = table.Column<int>(type: "INTEGER", nullable: true),
+                    Part = table.Column<int>(type: "INTEGER", nullable: true),
+                    Conference = table.Column<string>(type: "TEXT", nullable: true),
+                    Organization = table.Column<string>(type: "TEXT", nullable: true),
+                    Level = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -42,11 +48,11 @@ namespace IntellProdLifeCycleMS.Infrastructure.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     UserID = table.Column<int>(type: "INTEGER", nullable: false),
-                    FirstName = table.Column<int>(type: "INTEGER", nullable: false),
-                    LastName = table.Column<int>(type: "INTEGER", nullable: false),
-                    ShortFirstName = table.Column<int>(type: "INTEGER", nullable: false),
-                    ShortPatronamicName = table.Column<int>(type: "INTEGER", nullable: false),
-                    PatronamicName = table.Column<int>(type: "INTEGER", nullable: false),
+                    FirstName = table.Column<string>(type: "TEXT", nullable: true),
+                    LastName = table.Column<string>(type: "TEXT", nullable: true),
+                    ShortFirstName = table.Column<string>(type: "TEXT", nullable: true),
+                    ShortPatronamicName = table.Column<string>(type: "TEXT", nullable: true),
+                    PatronamicName = table.Column<string>(type: "TEXT", nullable: true),
                     NumberInList = table.Column<int>(type: "INTEGER", nullable: false),
                     IntelliegentWorkId = table.Column<int>(type: "INTEGER", nullable: true)
                 },

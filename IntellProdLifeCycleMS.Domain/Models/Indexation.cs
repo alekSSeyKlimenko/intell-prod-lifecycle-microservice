@@ -12,6 +12,7 @@ namespace IntellProdLifeCycleMS.Domain.Models
         public int Type { get; set; }
         public int Link { get; set; }
 
+        public int? IntelliegentWorkId { get; set; }
         public IntelliegentWork IntelliegentWork { get; set; }
     }
 }

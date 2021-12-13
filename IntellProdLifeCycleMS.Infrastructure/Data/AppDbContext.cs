@@ -13,15 +13,27 @@ namespace IntellProdLifeCycleMS.Infrastructure.Data
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options)
         {
-            
         }
         public DbSet<IntelliegentWork> IntelliegentWorks { get; set; }
+        public DbSet<Publication> Publication { get; set; }
+        public DbSet<Article> Article { get; set; }
+        public DbSet<Book> Book { get; set; }
         public DbSet<Author> Authors { get; set; }
         public DbSet<KeyWord> KeyWords { get; set; }
         public DbSet<Indexation> Indexations { get; set; }
         public DbSet<EducationalProgram> EducationalPrograms { get; set; }
 
+        
+
         protected override void OnConfiguring(DbContextOptionsBuilder options)
-            => options.UseSqlite("Data Source=Database.db");
+            => options.UseSqlite("Filename=Database.db");
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Author>()
+                .HasOne(p => p.IntelliegentWork)
+                .WithMany(b => b.Authors)
+                .HasForeignKey(p => p.IntelliegentWorkId);
+        }
     }
 }

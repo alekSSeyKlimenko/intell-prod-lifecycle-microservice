@@ -17,8 +17,14 @@ namespace IntellProdLifeCycleMS.API
 {
     public class Startup
     {
+
         public Startup(IConfiguration configuration)
         {
+            using (var client = new AppDbContext())
+            {
+                _ = client.Database.EnsureCreated();
+            }
+
             Configuration = configuration;
         }
 
@@ -28,8 +34,9 @@ namespace IntellProdLifeCycleMS.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddEntityFrameworkSqlite().AddDbContext<AppDbContext>(
-                options => { options.UseSqlite($"Data Source=Database.db"); });
+            services.AddEntityFrameworkSqlite().AddDbContext<AppDbContext>();
+            services.AddScoped<IPRepository>();
+            services.AddHttpContextAccessor();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

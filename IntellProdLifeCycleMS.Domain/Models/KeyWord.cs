@@ -11,6 +11,7 @@ namespace IntellProdLifeCycleMS.Domain.Models
         public int Id { get; set; }
         public string Word { get; set; }
 
+        public int? IntelliegentWorkId { get; set; }
         public IntelliegentWork IntelliegentWork { get; set; }
     }
 }

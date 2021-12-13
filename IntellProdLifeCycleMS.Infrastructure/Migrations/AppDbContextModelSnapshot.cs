@@ -22,26 +22,26 @@ namespace IntellProdLifeCycleMS.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("FirstName")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("FirstName")
+                        .HasColumnType("TEXT");
 
                     b.Property<int?>("IntelliegentWorkId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("LastName")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("LastName")
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("NumberInList")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("PatronamicName")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("PatronamicName")
+                        .HasColumnType("TEXT");
 
-                    b.Property<int>("ShortFirstName")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("ShortFirstName")
+                        .HasColumnType("TEXT");
 
-                    b.Property<int>("ShortPatronamicName")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("ShortPatronamicName")
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("UserID")
                         .HasColumnType("INTEGER");
@@ -106,8 +106,8 @@ namespace IntellProdLifeCycleMS.Infrastructure.Migrations
                     b.Property<string>("Country")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("DOI")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("DOI")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
                         .HasColumnType("TEXT");
@@ -160,17 +160,11 @@ namespace IntellProdLifeCycleMS.Infrastructure.Migrations
                     b.ToTable("KeyWords");
                 });
 
-            modelBuilder.Entity("IntellProdLifeCycleMS.Domain.Models.Book", b =>
+            modelBuilder.Entity("IntellProdLifeCycleMS.Domain.Models.Publication", b =>
                 {
                     b.HasBaseType("IntellProdLifeCycleMS.Domain.Models.IntelliegentWork");
 
                     b.Property<string>("Edition")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("Level")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Organization")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("PageCount")
@@ -180,6 +174,44 @@ namespace IntellProdLifeCycleMS.Infrastructure.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("UDK")
+                        .HasColumnType("TEXT");
+
+                    b.HasDiscriminator().HasValue("Publication");
+                });
+
+            modelBuilder.Entity("IntellProdLifeCycleMS.Domain.Models.Article", b =>
+                {
+                    b.HasBaseType("IntellProdLifeCycleMS.Domain.Models.Publication");
+
+                    b.Property<string>("CollectionTitle")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Conference")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("EndPage")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("MagazineNumber")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Part")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("StartPage")
+                        .HasColumnType("INTEGER");
+
+                    b.HasDiscriminator().HasValue("Article");
+                });
+
+            modelBuilder.Entity("IntellProdLifeCycleMS.Domain.Models.Book", b =>
+                {
+                    b.HasBaseType("IntellProdLifeCycleMS.Domain.Models.Publication");
+
+                    b.Property<int>("Level")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Organization")
                         .HasColumnType("TEXT");
 
                     b.HasDiscriminator().HasValue("Book");
