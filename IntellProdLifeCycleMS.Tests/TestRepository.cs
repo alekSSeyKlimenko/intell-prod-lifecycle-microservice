@@ -60,12 +60,10 @@ namespace IntellProdLifeCycleMS.Tests
 
             Book book = new Book { Id = 1, Title = "Nic", Subtitle = "123", Type = "123", DOI = "123", Year = "123", Country = "123", City = "123", GRINTI = "123", Status = "123", Description = "123", Organization = "123", Level = 1 };
             _ = repository.Add<Book>(book);
+            repository.DetObject<Book>(book);
 
-            Task.Delay(20000);
             Book newBook = new Book { Id = 1, Title = "new", Subtitle = "123", Type = "123", DOI = "123", Year = "123", Country = "123", City = "123", GRINTI = "123", Status = "123", Description = "123", Organization = "123", Level = 1, Indexations = null,Authors= null, EducationalPrograms = null, Edition = "123", KeyWords = null, PageCount = 1, Publisher = "123", UDK = "123"};
-
             _ = repository.Update<Book>(newBook);
-            Task.Delay(20000);
             Assert.Equal("new", repository.GetById<Book>(1).Result.Title);
         }
 

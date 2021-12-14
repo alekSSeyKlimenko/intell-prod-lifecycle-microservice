@@ -61,5 +61,10 @@ namespace IntellProdLifeCycleMS.Infrastructure.Data
         {
             return _dbContext.Set<T>().Any(e => e.Id == Id);
         }
+
+        public void DetObject<T>(T entity) where T : IntelliegentWork
+        {
+            _dbContext.Entry(entity).State = EntityState.Detached;
+        }
     }
 }
