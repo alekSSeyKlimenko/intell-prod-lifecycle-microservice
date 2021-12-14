@@ -179,6 +179,31 @@ namespace IntellProdLifeCycleMS.Infrastructure.Migrations
                     b.HasDiscriminator().HasValue("Publication");
                 });
 
+            modelBuilder.Entity("IntellProdLifeCycleMS.Domain.Models.RegistrationCertificate", b =>
+                {
+                    b.HasBaseType("IntellProdLifeCycleMS.Domain.Models.IntelliegentWork");
+
+                    b.Property<int>("Number")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ProductName")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ProductType")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("RegistrationDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("RequestDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("RightHolder")
+                        .HasColumnType("TEXT");
+
+                    b.HasDiscriminator().HasValue("RegistrationCertificate");
+                });
+
             modelBuilder.Entity("IntellProdLifeCycleMS.Domain.Models.Article", b =>
                 {
                     b.HasBaseType("IntellProdLifeCycleMS.Domain.Models.Publication");

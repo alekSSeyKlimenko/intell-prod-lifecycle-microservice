@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IntellProdLifeCycleMS.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20211212152658_init")]
-    partial class init
+    [Migration("20211213224949_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -179,6 +179,31 @@ namespace IntellProdLifeCycleMS.Infrastructure.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasDiscriminator().HasValue("Publication");
+                });
+
+            modelBuilder.Entity("IntellProdLifeCycleMS.Domain.Models.RegistrationCertificate", b =>
+                {
+                    b.HasBaseType("IntellProdLifeCycleMS.Domain.Models.IntelliegentWork");
+
+                    b.Property<int>("Number")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ProductName")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ProductType")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("RegistrationDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("RequestDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("RightHolder")
+                        .HasColumnType("TEXT");
+
+                    b.HasDiscriminator().HasValue("RegistrationCertificate");
                 });
 
             modelBuilder.Entity("IntellProdLifeCycleMS.Domain.Models.Article", b =>

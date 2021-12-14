@@ -35,6 +35,14 @@ namespace IntellProdLifeCycleMS.Infrastructure.Data
                 .HasOne(p => p.IntelliegentWork)
                 .WithMany(b => b.Authors)
                 .HasForeignKey(p => p.IntelliegentWorkId);
+            modelBuilder.Entity<Indexation>()
+                .HasOne(p => p.IntelliegentWork)
+                .WithMany(b => b.Indexations)
+                .HasForeignKey(p => p.IntelliegentWorkId);
+            modelBuilder.Entity<KeyWord>()
+                .HasOne(p => p.IntelliegentWork)
+                .WithMany(b => b.KeyWords)
+                .HasForeignKey(p => p.IntelliegentWorkId);
         }
     }
 }

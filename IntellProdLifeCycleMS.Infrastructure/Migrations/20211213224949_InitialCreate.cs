@@ -1,8 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace IntellProdLifeCycleMS.Infrastructure.Migrations
 {
-    public partial class init : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -34,7 +35,13 @@ namespace IntellProdLifeCycleMS.Infrastructure.Migrations
                     Part = table.Column<int>(type: "INTEGER", nullable: true),
                     Conference = table.Column<string>(type: "TEXT", nullable: true),
                     Organization = table.Column<string>(type: "TEXT", nullable: true),
-                    Level = table.Column<int>(type: "INTEGER", nullable: true)
+                    Level = table.Column<int>(type: "INTEGER", nullable: true),
+                    ProductType = table.Column<string>(type: "TEXT", nullable: true),
+                    ProductName = table.Column<string>(type: "TEXT", nullable: true),
+                    RightHolder = table.Column<string>(type: "TEXT", nullable: true),
+                    Number = table.Column<int>(type: "INTEGER", nullable: true),
+                    RegistrationDate = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    RequestDate = table.Column<DateTime>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
