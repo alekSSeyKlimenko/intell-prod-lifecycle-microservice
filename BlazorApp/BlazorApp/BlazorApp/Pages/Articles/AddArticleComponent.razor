@@ -1,0 +1,49 @@
+﻿@using System.Net.Http
+@inject HttpClient Http
+@using System.Net.Http.Json
+@using System.Threading.Tasks
+@using BlazorApp.Models
+@inject NavigationManager Navigation
+<h3>Добавление нового Article</h3>
+
+<input class="" @bind="newTitle" placeholder="Collection Title" />
+<input class="" @bind="newStartPage" placeholder="Start Page" />
+<input class="" @bind="newEndPage" placeholder="End Page" />
+<input class="" @bind="newMagazineNum" placeholder="Magazine Number" />
+<input class="" @bind="newPart" placeholder="Part" />
+<input class="" @bind="newConference" placeholder="Conference" />
+
+<button class="btn btn-dark" @onclick="AddArticle">Добавить новый Article</button>
+
+@code {
+
+
+    private string newTitle = "";
+    private int newStartPage = 0;
+    private int newEndPage = 0;
+    private int newMagazineNum = 0;
+    private int newPart = 1;
+    private string newConference = "";
+
+    [Parameter]
+    public EventCallback<string> OnAddArticle { get; set; }
+
+    private async Task AddArticle()
+    {
+        var article = new Article {
+            CollectionTitle = newTitle,
+            StartPage = newStartPage,
+            EndPage = newEndPage,
+            MagazineNumber = newMagazineNum,
+            Part = newPart,
+            Conference = newConference
+        };
+
+
+        await Http.PostAsJsonAsync("https://localhost:44302/api/Articles", article);
+        await OnAddArticle.InvokeAsync("OK");
+        Navigation.NavigateTo("Articles", true);
+
+    }
+
+}

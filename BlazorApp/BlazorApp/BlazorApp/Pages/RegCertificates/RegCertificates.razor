@@ -1,0 +1,79 @@
+﻿@page "/RegistrationCertificates"
+@inject HttpClient Http
+@using BlazorApp.Models
+@inject NavigationManager Navigation
+
+<h1>Registration certificates</h1>
+
+@if (registrationCertificates == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Product Type</th>
+                <th>Product Name</th>
+                <th>Righholder</th>
+                <th>Number</th>
+                <th>RegistrationDate</th>
+                <th>RequestDate</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var registrationCertificate in registrationCertificates)
+            {
+                <tr>
+                    <td>@registrationCertificate.Id</td>
+                    <td>@registrationCertificate.ProductType</td>
+                    <td>@registrationCertificate.ProductName</td>
+
+                    <td>@registrationCertificate.RightHolder</td>
+                    <td>@registrationCertificate.Number</td>
+                    <td>@registrationCertificate.RegistrationDate</td>
+                    <td>@registrationCertificate.RequestDate</td>
+                    <td>
+                        <button class="btn btn-dark" @onclick="()=>onModalOpen(registrationCertificate)">Edit</button>
+                        <button type="button" class="btn btn-danger" @onclick="() => DeleteCertificate(registrationCertificate.Id)">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <EditCertificateComponent @ref="@editCertificate" certificate="@tmpCertificate" />
+    <div>
+        <AddRegSertificateComponent />
+    </div>
+}
+
+
+@code {
+    private RegistrationCertificate[] registrationCertificates;
+
+    private RegistrationCertificate tmpCertificate = new RegistrationCertificate();
+
+    EditCertificateComponent editCertificate = new EditCertificateComponent();
+
+    private void onModalOpen(RegistrationCertificate certificate)
+    {
+        tmpCertificate = certificate;
+        editCertificate.onOpen();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        registrationCertificates = await Http.GetFromJsonAsync<RegistrationCertificate[]>
+    ("http://localhost:63307/api/RegistrationCertificates");
+    }
+
+    private async Task DeleteCertificate(int id)
+    {
+        await Http.DeleteAsync("http://localhost:63307/api/Articles/" + id);
+        Navigation.NavigateTo("RegistrationCertificates", true);
+    }
+}

@@ -37,6 +37,15 @@ namespace IntellProdLifeCycleMS.API
             services.AddEntityFrameworkSqlite().AddDbContext<AppDbContext>();
             services.AddScoped<IPRepository>();
             services.AddHttpContextAccessor();
+            services.AddCors(options =>
+            {
+                options.AddPolicy("default", policy =>
+                {
+                    policy.AllowAnyOrigin()
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -46,10 +55,15 @@ namespace IntellProdLifeCycleMS.API
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseCors(builder => builder
+     .AllowAnyOrigin()
+     .AllowAnyMethod()
+     .AllowAnyHeader());
 
             app.UseHttpsRedirection();
 
             app.UseRouting();
+            
 
             app.UseAuthorization();
 

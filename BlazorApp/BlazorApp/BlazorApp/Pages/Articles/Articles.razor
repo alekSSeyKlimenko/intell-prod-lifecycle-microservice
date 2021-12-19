@@ -1,0 +1,95 @@
+﻿@page "/Articles"
+@inject HttpClient Http
+@using BlazorApp.Models
+@using BlazorApp.Shared
+@inject NavigationManager Navigation
+<h1>Articles</h1>
+
+@if (articles == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+
+    <table class="table">
+        <thead>
+            <tr>
+
+                <th>ID</th>
+                <th>Title</th>
+                <th>Start Page</th>
+                <th>End Page</th>
+                <th>Magazine number</th>
+                <th>Part</th>
+                <th>Conference</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var article in articles)
+            {
+                <tr>
+                    <td>@article.Id</td>
+                    <td>@article.CollectionTitle</td>
+                    <td>@article.StartPage</td>
+                    <td>@article.EndPage</td>
+                    <td>@article.MagazineNumber</td>
+                    <td>@article.Part</td>
+                    <td>@article.Conference</td>
+                    <td>
+
+                        <button type="button" class="btn btn-dark" @onclick="() => onModalOpen(article)">Edit</button>
+                        <button type="button" class="btn btn-danger" @onclick="() => DeleteArticle(article.Id)">Delete</button>
+
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+
+    <EditArticleComponent article="@tempArticle" @ref="@editArticle" />
+    <div>
+        <AddArticleComponent />
+    </div>
+
+
+}
+
+
+@code {
+    private Article[] articles;
+
+
+
+    Article tempArticle = new Article();
+    EditArticleComponent editArticle = new EditArticleComponent();
+
+    private void onModalOpen(Article article)
+    {
+        tempArticle = article;
+        editArticle.onOpen();
+        this.StateHasChanged();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        articles = await Http.GetFromJsonAsync<Article[]>
+    ("http://localhost:63307/api/Articles");
+
+    }
+
+    protected override bool ShouldRender()
+    {
+        return true;
+    }
+
+    private async Task DeleteArticle(int id)
+    {
+        await Http.DeleteAsync("http://localhost:63307/api/Articles/" + id);
+        Navigation.NavigateTo("Articles", true);
+    }
+
+}

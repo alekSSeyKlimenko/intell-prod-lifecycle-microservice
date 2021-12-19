@@ -1,0 +1,39 @@
+﻿@using System.Net.Http
+@inject HttpClient Http
+@using System.Net.Http.Json
+@using System.Threading.Tasks
+@using BlazorApp.Models
+@inject NavigationManager Navigation
+
+<h3>Добавление нового Book</h3>
+
+<input @bind="newOrganization" placeholder="Organization" />
+<input @bind="newLevel" placeholder="Level" />
+
+
+<button class="btn btn-dark" @onclick="AddBook">Добавить новый Book</button>
+
+@code {
+    private string newOrganization = "";
+    private int newLevel = 0;
+
+    [Parameter]
+    public EventCallback<string>
+OnAddBook
+    { get; set; }
+
+    private async Task AddBook()
+    {
+        var book = new Book
+        {
+            Organization = newOrganization,
+            Level = newLevel
+        };
+
+
+        await Http.PostAsJsonAsync("https://localhost:44302/api/Books", book);
+        await OnAddBook.InvokeAsync("OK");
+        Navigation.NavigateTo("Books", true);
+
+    }
+}

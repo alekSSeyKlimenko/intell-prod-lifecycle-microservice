@@ -1,0 +1,70 @@
+﻿@page "/Books"
+@inject HttpClient Http
+@using BlazorApp.Models
+@inject NavigationManager Navigation
+<h1>Books</h1>
+
+
+@if (books == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Organization</th>
+                <th>Level</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var book in books)
+            {
+                <tr>
+                    <td>@book.Id</td>
+                    <td>@book.Organization</td>
+                    <td>@book.Level</td>
+                    <td>
+                        <button class="btn btn-dark" @onclick="()=>onModalOpen(book)">Edit</button>
+                        <button type="button" class="btn btn-danger" @onclick="() => DeleteBook(book.Id)">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <EditBookComponent book="@tempBook" @ref="@editBook" />
+    <div>
+        <AddBookComponent />
+    </div>
+
+}
+
+@code {
+    private Book[] books;
+
+    private Book tempBook = new Book();
+
+    EditBookComponent editBook = new EditBookComponent();
+
+    private void onModalOpen(Book book)
+    {
+        tempBook = book;
+        editBook.onOpen();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        books = await Http.GetFromJsonAsync<Book[]>
+    ("http://localhost:63307/api/Books");
+    }
+    private async Task DeleteBook(int id)
+    {
+        await Http.DeleteAsync("http://localhost:63307/api/Books/" + id);
+        Navigation.NavigateTo("Books", true);
+    }
+
+}

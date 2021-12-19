@@ -1,0 +1,85 @@
+﻿@using System.Net.Http
+@inject HttpClient Http
+@using System.Net.Http.Json
+@using System.Threading.Tasks
+@using BlazorApp.Models
+@using BlazorApp.Shared
+@inject NavigationManager Navigation
+
+<ModalBlock @ref="@modal">
+    <Body>
+        <h3>Редактировать Certificate</h3>
+
+        <br />
+        <span>ID: @certificate.Id</span>
+        <br />
+
+        <input class="" @bind="newProductType" placeholder="Product Type" />
+        <input class="" @bind="newProductName" placeholder="Product Name" />
+        <input class="" @bind="newRightHolder" placeholder="RightHolder" />
+        <input class="" @bind="newNumber" placeholder="Number" />
+        <input class="" @bind="newRegistrationDate" placeholder="Registration Date" />
+        <input class="" @bind="newRequestDate" placeholder="RequestDate" />
+
+        <button class="btn btn-dark" @onclick="EditCertificate">Редактировать Article</button>
+    </Body>
+</ModalBlock>
+
+@code {
+    [Parameter]
+    public RegistrationCertificate certificate { get; set; }
+
+    private ModalBlock modal { get; set; }
+
+    int id;
+
+    private string newProductType;
+    private string newProductName;
+    private string newRightHolder;
+    private int newNumber;
+    private DateTime newRegistrationDate = new DateTime();
+    private DateTime newRequestDate = new DateTime();
+
+
+
+    [Parameter]
+    public EventCallback<string> OnEditCertificate { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        id = certificate.Id;
+        newProductName = certificate.ProductName;
+        newProductType = certificate.ProductType;
+        newNumber = certificate.Number;
+        newRightHolder = certificate.RightHolder;
+        newRegistrationDate = certificate.RegistrationDate;
+        newRequestDate = certificate.RequestDate;
+    }
+
+    public void onOpen()
+    {
+        modal.Open();
+    }
+
+    private async Task EditCertificate()
+    {
+        modal.Close();
+        var certificate = new RegistrationCertificate
+        { Id = id,
+            ProductType = newProductType,
+            ProductName = newProductName,
+            Number = newNumber,
+            RightHolder = newRightHolder,
+            RegistrationDate = newRegistrationDate,
+            RequestDate = newRequestDate
+        };
+        Console.WriteLine(certificate);
+
+        await Http.PutAsJsonAsync("https://localhost:44302/api/RegistrationCertificates/" + certificate.Id, certificate);
+        await OnEditCertificate.InvokeAsync("OK");
+        Navigation.NavigateTo("RegistrationCertificates", true);
+
+
+    }
+
+}
