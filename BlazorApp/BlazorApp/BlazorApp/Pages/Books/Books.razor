@@ -10,7 +10,11 @@
     <p><em>Loading...</em></p>
 }
 else
-{
+
+{  <hr /> <div>
+    <AddBookComponent />
+</div>
+<hr/>
     <table class="table">
         <thead>
             <tr>
@@ -37,9 +41,7 @@ else
     </table>
 
     <EditBookComponent book="@tempBook" @ref="@editBook" />
-    <div>
-        <AddBookComponent />
-    </div>
+    
 
 }
 

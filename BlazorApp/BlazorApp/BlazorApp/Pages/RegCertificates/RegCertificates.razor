@@ -10,7 +10,11 @@
     <p><em>Loading...</em></p>
 }
 else
-{
+{<hr />
+    <div class="addBlock">
+        <AddRegSertificateComponent />
+    </div>
+    <hr />
     <table class="table">
         <thead>
             <tr>
@@ -46,9 +50,7 @@ else
     </table>
 
     <EditCertificateComponent @ref="@editCertificate" certificate="@tmpCertificate" />
-    <div>
-        <AddRegSertificateComponent />
-    </div>
+
 }
 
 
@@ -73,7 +75,7 @@ else
 
     private async Task DeleteCertificate(int id)
     {
-        await Http.DeleteAsync("http://localhost:63307/api/Articles/" + id);
+        await Http.DeleteAsync("http://localhost:63307/api/RegistrationCertificates/" + id);
         Navigation.NavigateTo("RegistrationCertificates", true);
     }
 }
